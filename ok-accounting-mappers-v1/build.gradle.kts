@@ -4,11 +4,13 @@ plugins {
 }
 
 dependencies {
+    val jUnitJupiterVersion: String by project
+
     implementation(kotlin("stdlib"))
     implementation(project(":ok-accounting-api-v1-jackson"))
     implementation(project(":ok-accounting-common"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitJupiterVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")
 }
 
 tasks.getByName<Test>("test") {
