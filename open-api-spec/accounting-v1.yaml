@@ -1,0 +1,379 @@
+openapi: 3.0.3
+info:
+  title: Accounting System - OpenAPI 3.0
+  description: |-
+    This is an Accounting System Server based on the OpenAPI 3.0 specification.  
+    Useful terms:
+    - _tenant_ - a trustee, the main user of the system
+    - _contact_ - a client of a trustee
+  contact:
+    email: adlerstone@yahoo.co.uk
+  version: 1.0.0
+servers:
+  - url: http://localhost:8011/api/v1
+tags:
+  - name: contacts
+    description: CRUD for contacts
+paths:
+  /contacts/create:
+    post:
+      tags:
+        - contacts
+      summary: Create new contact
+      description: Create new contact for a tenant
+      operationId: tenantCreate
+      requestBody:
+        description: Create a new contact for a tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactCreateResponse'
+  /contacts/read:
+    post:
+      tags:
+        - contacts
+      summary: Read contact(s)
+      description: Read existing contacts of a tenant
+      operationId: readContacts
+      requestBody:
+        description: Read existing contacts of a tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactReadRequest'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactReadResponse'
+  /contacts/update:
+    post:
+      tags:
+        - contacts
+      summary: Update contact
+      description: Update existing contact for a tenant
+      operationId: updateContact
+      requestBody:
+        description: Update existing contact for a tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactUpdateResponse'
+  /contacts/delete:
+    post:
+      tags:
+        - contacts
+      summary: Delete contact
+      description: Delete existing contact for a tenant
+      operationId: deleteContact
+      requestBody:
+        description: Delete existing contact for a tenant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDeleteRequest'
+        required: true
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactDeleteResponse'
+  /contacts/search:
+    post:
+      tags:
+        - contacts
+      summary: Search contact(s)
+      description: Search among existing contacts for a tenant
+      operationId: searchContact
+      requestBody:
+        description: Search criteria
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactSearchRequest'
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactSearchResponse'
+components:
+  schemas:
+    IRequest:
+      description: Base object for all the requests
+      type: object
+      properties:
+        requestType:
+          description: Discriminator field for request type detection
+          type: string
+          example: create
+        requestId:
+          description: Request identifier for debugging purpose
+          type: string
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/ContactCreateRequest'
+          read: '#/components/schemas/ContactReadRequest'
+          update: '#/components/schemas/ContactUpdateRequest'
+          delete: '#/components/schemas/ContactDeleteRequest'
+          search: '#/components/schemas/ContactSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Base object for all the responses
+      properties:
+        responseType:
+          type: string
+          description: Discriminator field for request type detection
+          example: create
+        requestId:
+          type: string
+          description: Request identifier for debugging purpose
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/ContactCreateResponse'
+          read: '#/components/schemas/ContactReadResponse'
+          update: '#/components/schemas/ContactUpdateResponse'
+          delete: '#/components/schemas/ContactDeleteResponse'
+          search: '#/components/schemas/ContactSearchResponse'
+
+    ContactId:
+      type: string
+      description: Contact identifier
+
+    ContactLock:
+      type: string
+      description: Version for optimistic lock
+
+    BaseContact:
+      description: Contains properties common for create and update requests
+      type: object
+      properties:
+        name:
+          description: Contact name
+          type: string
+
+    ContactCreateObject:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseContact'
+
+    ContactCreateRequest:
+      description: Data for creation of a new contact
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ContactRequestDebug'
+        - type: object
+          properties:
+            contact:
+              $ref: '#/components/schemas/ContactCreateObject'
+
+    ContactReadObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ContactId'
+
+    ContactReadRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ContactRequestDebug'
+        - type: object
+          properties:
+            contact:
+              $ref: '#/components/schemas/ContactReadObject'
+
+
+    ContactUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseContact'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ContactId'
+            lock:
+              $ref: '#/components/schemas/ContactLock'
+
+    ContactUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ContactRequestDebug'
+        - type: object
+          properties:
+            contact:
+              $ref: '#/components/schemas/ContactUpdateObject'
+
+    ContactDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ContactId'
+            lock:
+              $ref: '#/components/schemas/ContactLock'
+
+    ContactDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ContactRequestDebug'
+        - type: object
+          properties:
+            contact:
+              $ref: '#/components/schemas/ContactDeleteObject'
+
+    ContactSearchFilter:
+      type: object
+      description: Set of filters for search
+      properties:
+        searchString:
+          type: string
+          description: Search string designating contact name
+
+    ContactSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ContactRequestDebug'
+        - type: object
+          properties:
+            adFilter:
+              $ref: '#/components/schemas/ContactSearchFilter'
+
+    ContactResponseObject:
+      description: Data for a new contact creation response
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseContact'
+        - type: object
+          description: Object returned in the backend response body
+          properties:
+            id:
+              $ref: '#/components/schemas/ContactId'
+            lock:
+              $ref: '#/components/schemas/ContactLock'
+
+    ContactResponseSingle:
+      allOf:
+        - type: object
+          description: Response with a single contact
+          properties:
+            contact:
+              $ref: '#/components/schemas/ContactResponseObject'
+
+    ContactResponseMulti:
+      allOf:
+        - type: object
+          description: List of found contacts
+          properties:
+            contacts:
+              type: array
+              items:
+                $ref: '#/components/schemas/ContactResponseObject'
+
+    ContactCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ContactResponseSingle'
+
+    ContactReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ContactResponseSingle'
+
+    ContactUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ContactResponseSingle'
+
+    ContactDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ContactResponseSingle'
+
+    ContactSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ContactResponseMulti'
+
+    # STUBS ======================
+    ContactRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    ContactRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/ContactDebug'
+
+    ContactDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/ContactRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/ContactRequestDebugStubs'
+
+    ContactRequestDebugStubs:
+      type: string
+      description: All the stubs
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - badVisibility
+        - cannotDelete
+        - badSearchString
