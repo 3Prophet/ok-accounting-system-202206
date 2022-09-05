@@ -14,3 +14,4 @@ pluginManagement {
 include("ok-accounting-api-v1-jackson")
 include("ok-accounting-common")
 include("ok-accounting-mappers-v1")
+include("ok-accounting-spring")
