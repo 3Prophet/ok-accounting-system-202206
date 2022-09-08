@@ -5,9 +5,15 @@ pluginManagement {
         plugins {
             val kotlinVersion: String by settings
             val openapiVersion: String by settings
+            val springPluginVersion: String by settings
+            val springBootVersion: String by settings
+            val springDependencyManagementVersion: String by settings
 
             id("org.openapi.generator") version openapiVersion apply false
             kotlin("jvm") version kotlinVersion apply false
+            id("org.springframework.boot") version springBootVersion
+            id("io.spring.dependency-management") version springDependencyManagementVersion
+            kotlin("plugin.spring") version springPluginVersion
         }
     }
 }
