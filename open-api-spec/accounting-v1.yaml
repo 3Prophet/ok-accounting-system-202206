@@ -10,7 +10,7 @@ info:
     email: adlerstone@yahoo.co.uk
   version: 1.0.0
 servers:
-  - url: http://localhost:8011/api/v1
+  - url: http://localhost:8080/api/v1
 tags:
   - name: contacts
     description: CRUD for contacts
@@ -284,7 +284,7 @@ components:
         - $ref: '#/components/schemas/ContactRequestDebug'
         - type: object
           properties:
-            adFilter:
+            contactFilter:
               $ref: '#/components/schemas/ContactSearchFilter'
 
     ContactResponseObject:
