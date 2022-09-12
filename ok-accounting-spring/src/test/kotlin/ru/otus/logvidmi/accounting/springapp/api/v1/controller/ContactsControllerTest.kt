@@ -2,6 +2,7 @@ package ru.otus.logvidmi.accounting.springapp.api.v1.controller
 
 import AccContext
 import com.fasterxml.jackson.databind.ObjectMapper
+import ok.logvidmi.accounting.common.models.AccRequestId
 import ok.logvidmi.accounting.common.stubs.AccContactStubs
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,7 +27,19 @@ internal class ContactsControllerTest {
 
     @Test
     fun `calling create contacts returns status ok`() {
-        val request = mapper.writeValueAsString(ContactCreateRequest())
+
+        val requestObject = ContactCreateRequest(
+            requestType = "create",
+            requestId = "333",
+            debug = ContactDebug(
+                mode = ContactRequestDebugMode.STUB,
+                stub = ContactRequestDebugStubs.SUCCESS),
+            contact = ContactCreateObject(
+                name = "client"
+            )
+        )
+
+        val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
             AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportCreate()
         )
@@ -40,7 +53,19 @@ internal class ContactsControllerTest {
 
     @Test
     fun `calling read contacts returns status ok`() {
-        val request = mapper.writeValueAsString(ContactReadRequest())
+
+        val requestObject = ContactReadRequest(
+            requestType = "read",
+            requestId = "333",
+            debug = ContactDebug(
+                mode = ContactRequestDebugMode.STUB,
+                stub = ContactRequestDebugStubs.SUCCESS),
+            contact = ContactReadObject(
+                id = "1"
+            )
+        )
+
+        val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
             AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportRead()
         )
@@ -54,7 +79,21 @@ internal class ContactsControllerTest {
 
     @Test
     fun `calling update contacts returns status ok`() {
-        val request = mapper.writeValueAsString(ContactUpdateRequest())
+
+        val requestObject = ContactUpdateRequest(
+            requestType = "read",
+            requestId = "333",
+            debug = ContactDebug(
+                mode = ContactRequestDebugMode.STUB,
+                stub = ContactRequestDebugStubs.SUCCESS),
+            contact = ContactUpdateObject(
+                id = "1",
+                name = "client2",
+                lock = "1"
+            )
+        )
+
+        val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
             AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportUpdate()
         )
@@ -68,7 +107,20 @@ internal class ContactsControllerTest {
 
     @Test
     fun `calling delete contacts returns status ok`() {
-        val request = mapper.writeValueAsString(ContactDeleteRequest())
+
+        val requestObject = ContactDeleteRequest(
+            requestType = "read",
+            requestId = "333",
+            debug = ContactDebug(
+                mode = ContactRequestDebugMode.STUB,
+                stub = ContactRequestDebugStubs.SUCCESS),
+            contact = ContactDeleteObject(
+                id = "1",
+                lock = "1"
+            )
+        )
+
+        val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
             AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportDelete()
         )
@@ -82,7 +134,19 @@ internal class ContactsControllerTest {
 
     @Test
     fun `calling search contacts returns status ok`() {
-        val request = mapper.writeValueAsString(ContactSearchRequest())
+
+        val requestObject = ContactSearchRequest(
+            requestType = "read",
+            requestId = "333",
+            debug = ContactDebug(
+                mode = ContactRequestDebugMode.STUB,
+                stub = ContactRequestDebugStubs.SUCCESS),
+            contactFilter = ContactSearchFilter(
+                searchString = "client1"
+            )
+        )
+
+        val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
             AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportSearch()
         )

@@ -7,9 +7,7 @@ object AccContactStubs {
 
     fun get(): AccContact = READ_CONTACT_STUB.copy()
 
-    private val READ_CONTACT_STUB: AccContact
-        get() = AccContact(
+    private val READ_CONTACT_STUB = AccContact(
             id = AccContactId("333"),
-            name = "New Contact"
-        )
+            name = "New Contact")
 }
