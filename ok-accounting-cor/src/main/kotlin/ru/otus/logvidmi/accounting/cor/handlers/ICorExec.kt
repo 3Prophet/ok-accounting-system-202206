@@ -1,4 +1,4 @@
-package ru.otus.logvidmi.accounting.cor
+package ru.otus.logvidmi.accounting.cor.handlers
 
 /**
  * Basic interface of a handler in a CoR.

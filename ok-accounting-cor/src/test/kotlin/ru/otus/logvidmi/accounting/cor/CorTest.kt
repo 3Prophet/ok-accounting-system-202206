@@ -24,7 +24,7 @@ class CorTest {
     fun `worker should not execute when off`() = runBlocking {
         val worker = CorWorker<TestContext>(
             title = "w1",
-            blockOn = { status == CorStatuses.ERROR},
+            blockOn = { status == CorStatuses.ERROR },
             blockHandle = { history += "w1; " }
         )
         val context = TestContext()
@@ -46,21 +46,41 @@ class CorTest {
 
     @Test
     fun `chain should execute workers`() = runBlocking {
-        val createWorker = { title: String -> CorWorker<TestContext>(
-            title = title,
-            blockOn = { status == CorStatuses.NONE },
-            blockHandle = { history += "${title}; "}
-        ) }
+        val createWorker = { title: String ->
+            CorWorker<TestContext>(
+                title = title,
+                blockOn = { status == CorStatuses.NONE },
+                blockHandle = { history += "${title}; " }
+            )
+        }
 
         val chain = CorChain<TestContext>(
             title = "chain",
-            workers = listOf(createWorker("w1"), createWorker("w2")),
+            execs = listOf(createWorker("w1"), createWorker("w2")),
             handler = ::executeSequential,
         )
         val context = TestContext()
         chain.exec(context)
 
         assertEquals("w1; w2; ", context.history)
+    }
+
+    private fun execute(dsl: ICorExecDsl<TestContext>): TestContext = runBlocking {
+        val context = TestContext()
+        dsl.build().exec(context)
+        context
+    }
+
+    @Test
+    fun `handle should execute`() {
+        assertEquals(
+            "w1", execute(
+                rootChain {
+                    worker {
+                        handle { history = "w1" }
+                    }
+                }).history
+        )
     }
 }
 
