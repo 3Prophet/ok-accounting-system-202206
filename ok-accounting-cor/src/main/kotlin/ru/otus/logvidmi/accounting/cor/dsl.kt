@@ -30,9 +30,9 @@ interface ICorWorkerDsl<T>: ICorExecDsl<T> {
 /**
  * Usage:
  * rootChain<SomeContext> {
- *      worker {
+ *      worker() {
  *      }
- *      chain {
+ *      chain() {
  *          worker() {
  *          }
  *          worker() {
@@ -40,17 +40,17 @@ interface ICorWorkerDsl<T>: ICorExecDsl<T> {
  *      }
  * }
  */
-fun <T> rootChain(dsl: ICorChainDsl<T>.() -> Unit) = CorChainDsl<T>().apply { dsl }
+fun <T> rootChain(dsl: ICorChainDsl<T>.() -> Unit): ICorChainDsl<T> = CorChainDsl<T>().apply(dsl)
 
 /**
  * Creates chain which elements are executed sequentially inside another chain.
  */
-fun <T> ICorChainDsl<T>.chain(subChainDsl: ICorChainDsl<T>.() -> Unit) = add(CorChainDsl<T>().apply { subChainDsl })
+fun <T> ICorChainDsl<T>.chain(subChainDsl: ICorChainDsl<T>.() -> Unit) = add(CorChainDsl<T>().apply(subChainDsl))
 
 /**
  * Creates worker within a chain.
  */
-fun <T> ICorChainDsl<T>.worker(workerDsl: ICorWorkerDsl<T>.() -> Unit) = add(CorWorkerDsl<T>().apply { workerDsl })
+fun <T> ICorChainDsl<T>.worker(workerDsl: ICorWorkerDsl<T>.() -> Unit) = add(CorWorkerDsl<T>().apply(workerDsl))
 
 fun <T> ICorChainDsl<T>.worker(title: String, description: String = "", blockHandle: T.() -> Unit) =
     add(CorWorkerDsl<T>().also { it.title = title; it.description = description; it.handle(blockHandle) })

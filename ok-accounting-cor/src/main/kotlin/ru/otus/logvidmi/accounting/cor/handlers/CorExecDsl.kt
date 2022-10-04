@@ -7,7 +7,7 @@ abstract  class CorExecDsl<T>: ICorExecDsl<T> {
     override var description: String = ""
 
     protected var blockOn: suspend T.() -> Boolean = { true }
-    protected var blockExcept: suspend T.(e: Throwable) -> Unit = { e -> throw e }
+    protected var blockExcept: suspend T.(e: Throwable) -> Unit = { e: Throwable -> throw e }
 
     override fun on(function: suspend T.() -> Boolean) {
         blockOn = function

@@ -1,5 +1,6 @@
 package ru.otus.logvidmi.accounting.cor.handlers
 
+import ru.otus.logvidmi.accounting.cor.CorDsl
 import ru.otus.logvidmi.accounting.cor.ICorWorkerDsl
 
 class CorWorker<T>(title: String,
@@ -12,6 +13,7 @@ class CorWorker<T>(title: String,
     override suspend fun handle(context: T) = blockHandle(context)
 }
 
+@CorDsl
 class CorWorkerDsl<T>: CorExecDsl<T>(), ICorWorkerDsl<T> {
 
     var blockHandle: suspend T.() -> Unit = {}
