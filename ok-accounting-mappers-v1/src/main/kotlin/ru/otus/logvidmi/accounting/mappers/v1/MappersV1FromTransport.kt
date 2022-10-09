@@ -1,12 +1,12 @@
 package ru.otus.logvidmi.accounting.mappers.v1
 
-import AccContext
+import ok.logvidmi.accounting.common.AccContactContext
 import ok.logvidmi.accounting.common.models.*
 import ok.logvidmi.accounting.common.stubs.AccStubs
 import ru.otus.logvidmi.accounting.api.v1.models.*
 import ru.otus.logvidmi.accounting.mappers.v1.exceptions.UnknownRequestClass
 
-fun AccContext.fromTransport(request: IRequest) = when (request) {
+fun AccContactContext.fromTransport(request: IRequest) = when (request) {
     is ContactCreateRequest -> fromTransport(request)
     is ContactReadRequest -> fromTransport(request)
     is ContactUpdateRequest -> fromTransport(request)
@@ -53,7 +53,7 @@ private fun ContactSearchFilter?.toInternal(): AccContactFilter = AccContactFilt
 
 private fun String?.toContactWithId() = AccContact(id = this.toContactId())
 
-fun AccContext.fromTransport(request: ContactCreateRequest) {
+fun AccContactContext.fromTransport(request: ContactCreateRequest) {
     command = AccCommand.CREATE
     requestId = request.requestId()
     contactRequest = request.contact?.toInternal() ?: AccContact()
@@ -61,7 +61,7 @@ fun AccContext.fromTransport(request: ContactCreateRequest) {
     stubCase = request.debug.transportToStubCase()
 }
 
-fun AccContext.fromTransport(request: ContactUpdateRequest) {
+fun AccContactContext.fromTransport(request: ContactUpdateRequest) {
     command = AccCommand.UPDATE
     requestId = request.requestId()
     contactRequest = request.contact?.toInternal() ?: AccContact()
@@ -69,7 +69,7 @@ fun AccContext.fromTransport(request: ContactUpdateRequest) {
     stubCase = request.debug.transportToStubCase()
 }
 
-fun AccContext.fromTransport(request: ContactReadRequest) {
+fun AccContactContext.fromTransport(request: ContactReadRequest) {
     command = AccCommand.READ
     requestId = request.requestId()
     contactRequest = request.contact?.id.toContactWithId()
@@ -77,7 +77,7 @@ fun AccContext.fromTransport(request: ContactReadRequest) {
     stubCase = request.debug.transportToStubCase()
 }
 
-fun AccContext.fromTransport(request: ContactDeleteRequest) {
+fun AccContactContext.fromTransport(request: ContactDeleteRequest) {
     command = AccCommand.DELETE
     requestId = request.requestId()
     contactRequest = request.contact?.id.toContactWithId()
@@ -85,7 +85,7 @@ fun AccContext.fromTransport(request: ContactDeleteRequest) {
     stubCase = request.debug.transportToStubCase()
 }
 
-fun AccContext.fromTransport(request: ContactSearchRequest) {
+fun AccContactContext.fromTransport(request: ContactSearchRequest) {
     command = AccCommand.READ
     requestId = request.requestId()
     contactFilterRequest = request.contactFilter.toInternal()

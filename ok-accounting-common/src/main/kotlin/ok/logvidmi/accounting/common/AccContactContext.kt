@@ -1,8 +1,10 @@
+package ok.logvidmi.accounting.common
+
 import kotlinx.datetime.Instant
 import ok.logvidmi.accounting.common.models.*
 import ok.logvidmi.accounting.common.stubs.AccStubs
 
-data class AccContext(
+data class AccContactContext(
     var command: AccCommand =AccCommand.NONE,
     var state: AccState = AccState.NONE,
     var errors: MutableList<AccError> = mutableListOf(),

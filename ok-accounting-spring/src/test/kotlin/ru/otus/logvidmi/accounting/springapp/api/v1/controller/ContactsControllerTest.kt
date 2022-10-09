@@ -1,13 +1,12 @@
 package ru.otus.logvidmi.accounting.springapp.api.v1.controller
 
-import AccContext
+import ok.logvidmi.accounting.common.AccContactContext
 import com.fasterxml.jackson.databind.ObjectMapper
-import ok.logvidmi.accounting.common.models.AccRequestId
 import ok.logvidmi.accounting.common.stubs.AccContactStubs
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.http.MediaType
@@ -15,8 +14,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.otus.logvidmi.accounting.api.v1.models.*
 import ru.otus.logvidmi.accounting.mappers.v1.*
+import ru.otus.logvidmi.accounting.springapp.config.RequestProcessorConfig
 
 @WebMvcTest(ContactsController::class)
+@Import(RequestProcessorConfig::class)
 internal class ContactsControllerTest {
 
     @Autowired
@@ -41,7 +42,7 @@ internal class ContactsControllerTest {
 
         val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
-            AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportCreate()
+            AccContactContext().apply { contactResponse = AccContactStubs.get() }.toTransportCreate()
         )
 
         mvc.perform(
@@ -67,7 +68,7 @@ internal class ContactsControllerTest {
 
         val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
-            AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportRead()
+            AccContactContext().apply { contactResponse = AccContactStubs.get() }.toTransportRead()
         )
 
         mvc.perform(
@@ -95,7 +96,7 @@ internal class ContactsControllerTest {
 
         val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
-            AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportUpdate()
+            AccContactContext().apply { contactResponse = AccContactStubs.get() }.toTransportUpdate()
         )
 
         mvc.perform(
@@ -122,7 +123,7 @@ internal class ContactsControllerTest {
 
         val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
-            AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportDelete()
+            AccContactContext().apply { contactResponse = AccContactStubs.get() }.toTransportDelete()
         )
 
         mvc.perform(
@@ -148,7 +149,7 @@ internal class ContactsControllerTest {
 
         val request = mapper.writeValueAsString(requestObject)
         val response = mapper.writeValueAsString(
-            AccContext().apply { contactResponse = AccContactStubs.get() }.toTransportSearch()
+            AccContactContext().apply { contactResponse = AccContactStubs.get() }.toTransportSearch()
         )
 
         mvc.perform(
