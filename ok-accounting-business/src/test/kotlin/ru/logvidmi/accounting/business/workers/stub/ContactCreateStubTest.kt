@@ -1,4 +1,4 @@
-package ru.logvidmi.accounting.business
+package ru.logvidmi.accounting.business.workers.stub
 
 import ok.logvidmi.accounting.common.AccContactContext
 import kotlinx.coroutines.test.runTest
@@ -6,6 +6,7 @@ import ok.logvidmi.accounting.common.models.*
 import ok.logvidmi.accounting.common.stubs.AccStubs
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import ru.logvidmi.accounting.business.AccContactProcessor
 
 class ContactCreateStubTest {
 

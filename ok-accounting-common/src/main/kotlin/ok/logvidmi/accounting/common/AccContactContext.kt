@@ -15,7 +15,15 @@ data class AccContactContext(
     var requestId: AccRequestId = AccRequestId.NONE,
     var timeStart: Instant = Instant.NONE,
     var contactRequest: AccContact = AccContact(),
+
+    var contactRequestValidating: AccContact = AccContact(),
+    var contactRequestValidated: AccContact = AccContact(),
+
     var contactFilterRequest: AccContactFilter = AccContactFilter(),
+
+    var contactFilterRequestValidating: AccContactFilter = AccContactFilter(),
+    var contactFilterRequestValidated: AccContactFilter = AccContactFilter(),
+
     var contactResponse: AccContact = AccContact(),
     var contactsResponse: MutableList<AccContact> = mutableListOf(),
     )
