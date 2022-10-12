@@ -13,8 +13,8 @@ fun ICorChainDsl<AccContactContext>.stubNoCase(title: String) = worker {
     handle {
         fail(
             AccError(
-                code = "404",
-                field = "-",
+                code = "validation",
+                field = "stub",
                 group = "not-found",
                 message = "No stub found for stub case ${stubCase.name}"
             )

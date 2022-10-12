@@ -12,6 +12,6 @@ fun ICorChainDsl<AccContactContext>.stubReadContactSuccess(title: String) = work
     on { state == AccState.RUNNING && stubCase == AccStubs.SUCCESS }
     handle {
         state = AccState.FINISHING
-        this.contactResponse = AccContact(id = contactRequest.id, name = contactRequest.name)
+        this.contactResponse = AccContact(id = contactRequest.id, name = "Contact")
     }
 }

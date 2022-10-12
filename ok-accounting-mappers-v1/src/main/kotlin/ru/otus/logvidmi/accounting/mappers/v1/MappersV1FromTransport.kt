@@ -86,7 +86,7 @@ fun AccContactContext.fromTransport(request: ContactDeleteRequest) {
 }
 
 fun AccContactContext.fromTransport(request: ContactSearchRequest) {
-    command = AccCommand.READ
+    command = AccCommand.SEARCH
     requestId = request.requestId()
     contactFilterRequest = request.contactFilter.toInternal()
     workMode = request.debug.transportToWorkMode()

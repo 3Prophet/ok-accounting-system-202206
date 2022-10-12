@@ -14,7 +14,7 @@ fun ICorChainDsl<AccContactContext>.stubDbError(title: String) = worker {
     on { state == AccState.RUNNING && stubCase == AccStubs.DB_ERROR }
     handle {
         fail(
-            AccError(code = "500", group = "internal", message = "Db access error")
+            AccError(code = "internal-db", group = "internal", message = "Db error")
         )
     }
 }

@@ -1,6 +1,7 @@
 package ru.logvidmi.accounting.business.workers
 
 import ok.logvidmi.accounting.common.AccContactContext
+import ok.logvidmi.accounting.common.errorValidation
 import ok.logvidmi.accounting.common.fail
 import ok.logvidmi.accounting.common.models.AccError
 import ok.logvidmi.accounting.common.models.AccState
@@ -13,7 +14,11 @@ fun ICorChainDsl<AccContactContext>.stubValidationBadName(title: String) = worke
     on { state == AccState.RUNNING && stubCase == AccStubs.BAD_TITLE }
     handle {
         fail(
-            AccError(code = "400", field = "name", group = "validation", message = "Illegal name")
+            errorValidation(
+                field = "name",
+                violationCode = "empty",
+                description = "field must not be empty"
+            )
         )
     }
 }
