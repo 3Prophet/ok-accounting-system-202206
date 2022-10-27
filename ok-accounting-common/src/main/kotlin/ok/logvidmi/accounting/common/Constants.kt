@@ -1,4 +1,4 @@
-
+package ok.logvidmi.accounting.common
 import kotlinx.datetime.Instant
 
 

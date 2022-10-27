@@ -1,11 +1,11 @@
 package ru.otus.logvidmi.accounting.mappers.v1
 
-import AccContext
+import ok.logvidmi.accounting.common.AccContactContext
 import ok.logvidmi.accounting.common.models.*
 import ru.otus.logvidmi.accounting.api.v1.models.*
 import ru.otus.logvidmi.accounting.mappers.v1.exceptions.UnknownAccCommand
 
-fun AccContext.toTransportContact(): IResponse = when(val cmd = command) {
+fun AccContactContext.toTransportContact(): IResponse = when(val cmd = command) {
     AccCommand.CREATE -> toTransportCreate()
     AccCommand.READ -> toTransportRead()
     AccCommand.UPDATE -> toTransportUpdate()
@@ -14,37 +14,37 @@ fun AccContext.toTransportContact(): IResponse = when(val cmd = command) {
     AccCommand.NONE -> throw UnknownAccCommand(cmd)
 }
 
-fun AccContext.toTransportCreate() = ContactCreateResponse(
+fun AccContactContext.toTransportCreate() = ContactCreateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == AccState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == AccState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     contact = contactResponse.toTransportContact()
 )
 
-fun AccContext.toTransportRead() = ContactReadResponse(
+fun AccContactContext.toTransportRead() = ContactReadResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == AccState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == AccState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     contact = contactResponse.toTransportContact()
 )
 
-fun AccContext.toTransportUpdate() = ContactUpdateResponse(
+fun AccContactContext.toTransportUpdate() = ContactUpdateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == AccState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == AccState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     contact = contactResponse.toTransportContact()
 )
 
-fun AccContext.toTransportDelete() = ContactDeleteResponse(
+fun AccContactContext.toTransportDelete() = ContactDeleteResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == AccState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == AccState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     contact = contactResponse.toTransportContact()
 )
 
-fun AccContext.toTransportSearch() = ContactSearchResponse(
+fun AccContactContext.toTransportSearch() = ContactSearchResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == AccState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == AccState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     contacts = contactsResponse.toTransportContact()
 )

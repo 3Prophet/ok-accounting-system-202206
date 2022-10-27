@@ -1,6 +1,6 @@
 package ru.otus.logvidmi.accounting.mappers.v1
 
-import AccContext
+import ok.logvidmi.accounting.common.AccContactContext
 import ok.logvidmi.accounting.common.models.*
 import ok.logvidmi.accounting.common.stubs.AccStubs
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -22,7 +22,7 @@ class MapperTest {
             )
         )
 
-        val context = AccContext()
+        val context = AccContactContext()
         context.fromTransport(req)
 
         assertEquals(AccStubs.SUCCESS, context.stubCase)
@@ -32,7 +32,7 @@ class MapperTest {
 
     @Test
     fun toTransport() {
-        val context = AccContext(
+        val context = AccContactContext(
             requestId = AccRequestId("1234"),
             command = AccCommand.CREATE,
             contactResponse = AccContact(
