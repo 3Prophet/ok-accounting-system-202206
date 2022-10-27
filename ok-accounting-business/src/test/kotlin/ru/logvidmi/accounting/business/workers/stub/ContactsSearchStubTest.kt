@@ -27,6 +27,6 @@ class ContactsSearchStubTest {
         processor.exec(ctx)
         Assertions.assertEquals(AccState.FINISHING, ctx.state)
         Assertions.assertTrue(ctx.contactsResponse.isNotEmpty())
-        Assertions.assertTrue(ctx.contactsResponse.map { it.name.contains(searchString) }.reduce{ acc, next -> acc && next})
+        Assertions.assertTrue(ctx.contactsResponse.map { it.name.contains(searchString) }.all{ it })
     }
 }

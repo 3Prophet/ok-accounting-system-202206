@@ -8,6 +8,7 @@ class RequestSerializationTest {
 
     private val request = ContactCreateRequest(
         requestId = "123",
+        requestType = "create",
         debug = ContactDebug(
             mode = ContactRequestDebugMode.STUB,
             stub = ContactRequestDebugStubs.BAD_TITLE
