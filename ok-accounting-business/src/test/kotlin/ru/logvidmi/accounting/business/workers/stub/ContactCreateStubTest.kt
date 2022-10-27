@@ -47,16 +47,14 @@ class ContactCreateStubTest {
         assertEquals(AccState.FAILING, ctx.state)
         assertTrue(ctx.errors.isNotEmpty())
         assertEquals(1, ctx.errors.size)
-        assertEquals(
-            errorValidation(
-                field = "name",
-                violationCode = "empty",
-                description = "field must not be empty"
-            ), ctx.errors.firstOrNull())
+
+        val error = ctx.errors.firstOrNull()
+        assertEquals("name", error?.field)
+        assertEquals("validation-name-empty", error?.code)
     }
 
     @Test
-    fun `db error`() =runTest {
+    fun `db error`() = runTest {
         val ctx = AccContactContext(
             command = AccCommand.CREATE,
             workMode = AccWorkMode.STUB,
@@ -68,8 +66,9 @@ class ContactCreateStubTest {
 
         processor.exec(ctx)
         assertEquals(AccState.FAILING, ctx.state)
-        assertEquals(AccError(code = "internal-db", group = "internal", message = "Db error"),
-            ctx.errors.firstOrNull())
+        val error = ctx.errors.firstOrNull()
+        assertEquals("internal-db", error?.code)
+        assertEquals("internal", error?.group)
     }
 
     @Test
@@ -88,11 +87,8 @@ class ContactCreateStubTest {
         processor.exec(ctx)
         assertEquals(AccState.FAILING, ctx.state)
         assertEquals(1, ctx.errors.size)
-        assertEquals(            AccError(
-            code = "validation",
-            field = "stub",
-            group = "not-found",
-            message = "No stub found for stub case ${nonExistentStubCaseName.name}"
-        ), ctx.errors.firstOrNull())
+        val error = ctx.errors.firstOrNull()
+        assertEquals("validation", error?.code)
+        assertEquals("stub", error?.field)
     }
 }
